@@ -53,29 +53,6 @@ defmodule FosterShelterBigotitosWeb.AnimalControllerTest do
     end
   end
 
-  describe "update animal" do
-    setup [:create_animal]
-
-    test "renders animal when data is valid", %{conn: conn, animal: %Animal{id: id} = animal} do
-      conn = put(conn, Routes.animal_path(conn, :update, animal), animal: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
-
-      conn = get(conn, Routes.animal_path(conn, :show, id))
-
-      assert %{
-               "id" => id,
-               "age" => 43,
-               "name" => "some updated name",
-               "species" => "some updated species"
-             } = json_response(conn, 200)["data"]
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, animal: animal} do
-      conn = put(conn, Routes.animal_path(conn, :update, animal), animal: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
-  end
-
   describe "delete animal" do
     setup [:create_animal]
 
