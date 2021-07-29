@@ -6,9 +6,30 @@ defmodule FosterShelterBigotitos.CustomersTest do
   describe "customers" do
     alias FosterShelterBigotitos.Customers.Customer
 
-    @valid_attrs %{address: "some address", age: 42, email: "some email", last_name: "some last_name", name: "some name", phone_number: "some phone_number"}
-    @update_attrs %{address: "some updated address", age: 43, email: "some updated email", last_name: "some updated last_name", name: "some updated name", phone_number: "some updated phone_number"}
-    @invalid_attrs %{address: nil, age: nil, email: nil, last_name: nil, name: nil, phone_number: nil}
+    @valid_attrs %{
+      address: "some address",
+      age: 42,
+      email: "some email",
+      last_name: "some last_name",
+      name: "some name",
+      phone_number: "some phone_number"
+    }
+    @update_attrs %{
+      address: "some updated address",
+      age: 43,
+      email: "some updated email",
+      last_name: "some updated last_name",
+      name: "some updated name",
+      phone_number: "some updated phone_number"
+    }
+    @invalid_attrs %{
+      address: nil,
+      age: nil,
+      email: nil,
+      last_name: nil,
+      name: nil,
+      phone_number: nil
+    }
 
     def customer_fixture(attrs \\ %{}) do
       {:ok, customer} =

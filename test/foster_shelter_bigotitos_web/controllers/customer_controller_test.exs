@@ -20,7 +20,14 @@ defmodule FosterShelterBigotitosWeb.CustomerControllerTest do
     name: "some updated name",
     phone_number: "some updated phone_number"
   }
-  @invalid_attrs %{address: nil, age: nil, email: nil, last_name: nil, name: nil, phone_number: nil}
+  @invalid_attrs %{
+    address: nil,
+    age: nil,
+    email: nil,
+    last_name: nil,
+    name: nil,
+    phone_number: nil
+  }
 
   def fixture(:customer) do
     {:ok, customer} = Customers.create_customer(@create_attrs)
@@ -65,7 +72,10 @@ defmodule FosterShelterBigotitosWeb.CustomerControllerTest do
   describe "update customer" do
     setup [:create_customer]
 
-    test "renders customer when data is valid", %{conn: conn, customer: %Customer{id: id} = customer} do
+    test "renders customer when data is valid", %{
+      conn: conn,
+      customer: %Customer{id: id} = customer
+    } do
       conn = put(conn, Routes.customer_path(conn, :update, customer), customer: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 

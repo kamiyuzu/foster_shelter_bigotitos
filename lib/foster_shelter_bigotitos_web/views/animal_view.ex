@@ -11,7 +11,8 @@ defmodule FosterShelterBigotitosWeb.AnimalView do
   end
 
   def render("animal.json", %{animal: animal}) do
-    %{id: animal.id,
+    %{
+      id: animal.id,
       name: animal.name,
       species: animal.species,
       age: animal.age,

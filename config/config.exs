@@ -14,7 +14,11 @@ config :foster_shelter_bigotitos,
 config :foster_shelter_bigotitos, FosterShelterBigotitosWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "1gxjSa2fLON+PBMFl0jVr5Myj0e8oQaLmoPYfX8pNpsODld14hJndBUR7kIH6Z/x",
-  render_errors: [view: FosterShelterBigotitosWeb.ErrorView, accepts: ~w(html json), layout: false],
+  render_errors: [
+    view: FosterShelterBigotitosWeb.ErrorView,
+    accepts: ~w(html json),
+    layout: false
+  ],
   pubsub_server: FosterShelterBigotitos.PubSub,
   live_view: [signing_salt: "2vpth/nB"]
 

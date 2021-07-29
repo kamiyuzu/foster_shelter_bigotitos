@@ -36,9 +36,10 @@ defmodule FosterShelterBigotitos.Customers do
 
   """
   def get_customer!(id), do: Repo.get!(Customer, id)
-  def get_customer_by_email!(nil), do: nil
-  def get_customer_by_email!(email), do: Repo.get_by!(Customer, email: email)
 
+  @spec get_customer_by_email(any) :: any
+  def get_customer_by_email(nil), do: nil
+  def get_customer_by_email(email), do: Repo.get_by(Customer, email: email)
 
   @doc """
   Creates a customer.

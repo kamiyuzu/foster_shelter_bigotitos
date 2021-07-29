@@ -11,12 +11,14 @@ defmodule FosterShelterBigotitosWeb.CustomerView do
   end
 
   def render("customer.json", %{customer: customer}) do
-    %{id: customer.id,
+    %{
+      id: customer.id,
       name: customer.name,
       last_name: customer.last_name,
       address: customer.address,
       phone_number: customer.phone_number,
       email: customer.email,
-      age: customer.age}
+      age: customer.age
+    }
   end
 end

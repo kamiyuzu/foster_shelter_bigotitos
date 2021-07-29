@@ -29,15 +29,23 @@ defmodule FosterShelterBigotitosWeb.AnimalController do
 
   def update(conn, %{"id" => id, "animal" => animal_params, "customer_email" => email}) do
     animal = id |> Animals.get_animal!() |> Repo.preload([:customer])
-    customer = Customers.get_customer_by_email!(email)
-    animal_changeset = Animal.changeset(%Animal{}, animal_params)
-    updated_animal = animal
+    customer = Customers.get_customer_by_email(email)
+    animal_changeset = Ecto.Changeset.cast(%Animal{}, animal_params, [:name, :species, :age])
+
+    updated_animal =
+      animal
       |> Ecto.Changeset.change(animal_changeset.changes)
       |> Ecto.Changeset.put_assoc(:customer, customer)
-      |> Repo.update!()
+      |> Repo.update()
 
-    with {:ok, %Animal{} = animal} <- updated_animal do
+    with true <- animal_changeset.valid?,
+         %Customers.Customer{} <- customer,
+         {:ok, %Animal{} = animal} <- updated_animal do
       render(conn, "show.json", animal: animal)
+    else
+      false -> {:error, animal_changeset}
+      nil -> {:error, :not_found}
+      error -> error
     end
   end
 
