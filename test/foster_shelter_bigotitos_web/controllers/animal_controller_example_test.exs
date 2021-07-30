@@ -38,7 +38,7 @@ defmodule FosterShelterBigotitosWeb.AnimalControllerExampleTest do
   describe "update animal" do
     setup [:create_fixtures]
 
-    test "renders animal when data is valid", %{
+    test "renders animal when data is valid with existing customer email", %{
       conn: conn,
       animal: %Animal{id: id} = animal,
       customer: customer
@@ -60,6 +60,32 @@ defmodule FosterShelterBigotitosWeb.AnimalControllerExampleTest do
                "age" => 43,
                "name" => "some updated name",
                "species" => "some updated species",
+               "customer_id" => ^expected_customer_id
+             } = json_response(conn, 200)["data"]
+    end
+
+    test "renders animal when data is invalid with existing customer email", %{
+      conn: conn,
+      animal: %Animal{id: id} = animal,
+      customer: customer
+    } do
+      conn =
+        put(conn, Routes.animal_path(conn, :update, animal),
+          animal: @invalid_attrs,
+          customer_email: customer.email
+        )
+
+      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+
+      conn = get(conn, Routes.animal_path(conn, :show, id))
+
+      expected_customer_id = customer.id
+
+      assert %{
+               "id" => _id,
+               "age" => 42,
+               "name" => "some name",
+               "species" => "some species",
                "customer_id" => ^expected_customer_id
              } = json_response(conn, 200)["data"]
     end
