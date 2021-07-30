@@ -64,7 +64,7 @@ defmodule FosterShelterBigotitosWeb.AnimalControllerExampleTest do
              } = json_response(conn, 200)["data"]
     end
 
-    test "renders errors when data is invalid", %{conn: conn, animal: animal} do
+    test "renders errors when email is invalid", %{conn: conn, animal: animal} do
       conn =
         put(conn, Routes.animal_path(conn, :update, animal),
           animal: @invalid_attrs,

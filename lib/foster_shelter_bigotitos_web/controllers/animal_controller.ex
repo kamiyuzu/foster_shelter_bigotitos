@@ -38,14 +38,11 @@ defmodule FosterShelterBigotitosWeb.AnimalController do
       |> Ecto.Changeset.put_assoc(:customer, customer)
       |> Repo.update()
 
-    with true <- animal_changeset.valid?,
-         %Customers.Customer{} <- customer,
+    with %Customers.Customer{} <- customer,
          {:ok, %Animal{} = animal} <- updated_animal do
       render(conn, "show.json", animal: animal)
     else
-      false -> {:error, animal_changeset}
       nil -> {:error, :not_found}
-      error -> error
     end
   end
 
