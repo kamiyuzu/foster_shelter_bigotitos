@@ -1,10 +1,9 @@
 defmodule FosterShelterBigotitosWeb.AnimalController do
   use FosterShelterBigotitosWeb, :controller
 
-  alias FosterShelterBigotitos.Repo
-  alias FosterShelterBigotitos.Customers
   alias FosterShelterBigotitos.Animals
   alias FosterShelterBigotitos.Animals.Animal
+  alias FosterShelterBigotitos.Actions.Adopt
 
   action_fallback FosterShelterBigotitosWeb.FallbackController
 
@@ -27,19 +26,8 @@ defmodule FosterShelterBigotitosWeb.AnimalController do
     render(conn, "show.json", animal: animal)
   end
 
-  def update(conn, %{"id" => id, "animal" => animal_params, "customer_email" => email}) do
-    animal = id |> Animals.get_animal!() |> Repo.preload([:customer])
-    customer = Customers.get_customer_by_email(email)
-    animal_changeset = Ecto.Changeset.cast(%Animal{}, animal_params, [:name, :species, :age])
-
-    updated_animal =
-      animal
-      |> Ecto.Changeset.change(animal_changeset.changes)
-      |> Ecto.Changeset.put_assoc(:customer, customer)
-      |> Repo.update()
-
-    with %Customers.Customer{} <- customer,
-         {:ok, %Animal{} = animal} <- updated_animal do
+  def update(conn, params) do
+    with %Animal{} = animal <- Adopt.call(params) do
       render(conn, "show.json", animal: animal)
     else
       nil -> {:error, :not_found}
