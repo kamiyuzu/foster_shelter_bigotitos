@@ -2,23 +2,9 @@ defmodule FosterShelterBigotitos.Actions.AdoptTest do
   use FosterShelterBigotitos.DataCase
 
   alias FosterShelterBigotitos.Actions.Adopt
-  alias FosterShelterBigotitos.Customers
-  alias FosterShelterBigotitos.Animals
   alias FosterShelterBigotitos.Animals.Animal
+  alias FosterShelterBigotitos.Actions.Adopt.Mocks
 
-  @create_attrs %{
-    age: 42,
-    name: "some name",
-    species: "some species"
-  }
-  @create_customer_attrs %{
-    address: "some address",
-    age: 42,
-    email: "some email",
-    last_name: "some last_name",
-    name: "some name",
-    phone_number: "some phone_number"
-  }
   @update_attrs %{
     age: 43,
     name: "some updated name",
@@ -27,18 +13,24 @@ defmodule FosterShelterBigotitos.Actions.AdoptTest do
 
   describe "call/1" do
     setup do
-      %{animal: animal, customer: customer} = create_fixtures()
-      %{adopt_params: %{"id" => animal.id, "animal"=> @update_attrs, "customer_email" => customer.email}}
+      %{
+        adopt_params: %{"id" => 1, "animal" => @update_attrs, "customer_email" => "some email"},
+        custom_opts: [animals: Mocks.Animals]
+      }
     end
 
-    test "customer_email doesnt exist", %{adopt_params: adopt_params} do
+    test "customer_email doesnt exist", %{adopt_params: adopt_params, custom_opts: custom_opts} do
       non_valid_email_params = %{adopt_params | "customer_email" => "non_valid"}
+      testing_opts = custom_opts ++ [repo: Mocks.RepoError, customers: Mocks.CustomersError]
+
       expected_response = nil
-      assert Adopt.call(non_valid_email_params) == expected_response
+      assert Adopt.call(non_valid_email_params, testing_opts) == expected_response
     end
 
-    test "valid params", %{adopt_params: adopt_params} do
-      animal = Adopt.call(adopt_params)
+    test "valid params", %{adopt_params: adopt_params, custom_opts: custom_opts} do
+      testing_opts = custom_opts ++ [repo: Mocks.RepoOk, customers: Mocks.CustomersOk]
+
+      animal = Adopt.call(adopt_params, testing_opts)
       assert %Animal{} = animal
       expected_age = 43
       assert animal.age == expected_age
@@ -47,16 +39,5 @@ defmodule FosterShelterBigotitos.Actions.AdoptTest do
       expected_species = "some updated species"
       assert animal.species == expected_species
     end
-  end
-
-  defp create_fixtures do
-    {animal, customer} = fixtures()
-    %{animal: animal, customer: customer}
-  end
-
-  defp fixtures do
-    {:ok, customer} = Customers.create_customer(@create_customer_attrs)
-    {:ok, animal} = Animals.create_animal(@create_attrs)
-    {animal, customer}
   end
 end
