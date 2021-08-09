@@ -1,5 +1,5 @@
 defmodule FosterShelterBigotitos.Actions.AdoptTest do
-  use FosterShelterBigotitos.DataCase
+  use ExUnit.Case, async: true
 
   alias FosterShelterBigotitos.Actions.Adopt
   alias FosterShelterBigotitos.Animals.Animal
